@@ -1,8 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const {
-  getVoiceConnection,
-} = require("@discordjs/voice");
-
+const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -11,7 +8,7 @@ module.exports = {
   async execute(interaction) {
     try {
       const connection = getVoiceConnection(interaction.guildId);
-      connection.destroy()
+      connection.destroy();
     } catch (error) {
       console.log(error.message);
     }

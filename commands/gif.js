@@ -12,7 +12,7 @@ module.exports = {
     ),
   async execute(interaction) {
     await interaction.reply(
-      `!Yepaaaa¡, este es mi link para ser parte de tu servidor`
+      `gif por el momento no disponible`
     );
   },
 };
