@@ -4,9 +4,9 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("queue")
     .setDescription("list the songs of the queue"),
-  async execute(interaction, client, player) {
+  async execute(interaction, client) {
     try {
-      const queue = player.getQueue(interaction.guild);
+      const queue = client.player.getQueue(interaction.guild);
 
       const firstTrack = queue.previousTracks[queue.previousTracks.length - 1];
       const tracks = [

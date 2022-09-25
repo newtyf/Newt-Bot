@@ -9,9 +9,14 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
 });
 // Create a new player instance
-const player = new Player(client)
+client.player = new Player(client, {
+  ytdlOptions: {
+    quality: "highestaudio",
+    highWaterMark: 1 << 25
+  }
+})
 
-player.on("trackStart", (queue, track) => queue.metadata.channel.send(`🎶 | Now playing **${track.title}**! \n ${track.url}`))
+client.player.on("trackStart", (queue, track) => queue.metadata.channel.send(`🎶 | Now playing **${track.title}**! \n ${track.url}`))
 
 // Reading commands files
 client.commands = new Collection();
@@ -31,7 +36,7 @@ client.on("interactionCreate", async (interaction) => {
   if (!command) return;
 
   try {
-    await command.execute(interaction, client, player);
+    await command.execute(interaction, client);
   } catch (error) {
     console.error(error);
     await interaction.reply({

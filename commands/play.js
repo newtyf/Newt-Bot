@@ -10,7 +10,7 @@ module.exports = {
         .setDescription("the url to reproduce")
         .setRequired(true)
     ),
-  async execute(interaction, client, player) {
+  async execute(interaction, client) {
     const guild = client.guilds.cache.get(interaction.guildId);
     const member = guild.members.cache.get(interaction.member.user.id);
     const voiceChannel = member.voice.channel;
@@ -23,7 +23,7 @@ module.exports = {
       });
     }
 
-    const queue = player.createQueue(interaction.guild, {
+    const queue = client.player.createQueue(interaction.guild, {
       metadata: {
         channel: interaction.channel,
       },
@@ -40,20 +40,39 @@ module.exports = {
     }
 
     await interaction.deferReply();
-    const track = await player
-      .search(song, {
-        requestedBy: interaction.user,
-      })
-      .then((Listtracks) => Listtracks.tracks[0]);
-    if (!track)
+    const resultSearch = await client.player.search(song, {
+      requestedBy: interaction.user,
+    });
+
+    ;
+    if (resultSearch.playlist === null) {
+      var track = resultSearch.tracks[0]
+    } else {
+      var playlist = resultSearch.playlist.tracks
+    }
+
+    console.log(resultSearch);
+
+    //const playlist = await client.player.search();
+
+    if (!resultSearch)
       return await interaction.followUp({
         content: `❌ | Musica **${song}** no encontrada!`,
       });
 
-    queue.play(track);
+    if (resultSearch.playlist === null) {
+      queue.play(track)
+      return await interaction.followUp({
+        content: `⏱️ | Musica añadida a la lista **${track.title}**!`,
+      });
+    } else {
+      queue.play(playlist[0])
+      playlist.shift()
+      queue.addTracks(playlist)
+      return await interaction.followUp({
+        content: `⏱️ | Musica añadida a la lista **${playlist[0].title}**!`,
+      });
+    }
 
-    return await interaction.followUp({
-      content: `⏱️ | Musica añadida a la lista **${track.title}**!`,
-    });
   },
 };
