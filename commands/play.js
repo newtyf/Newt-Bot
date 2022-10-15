@@ -51,8 +51,6 @@ module.exports = {
       var playlist = resultSearch.playlist.tracks
     }
 
-    console.log(resultSearch);
-
     //const playlist = await client.player.search();
 
     if (!resultSearch)
