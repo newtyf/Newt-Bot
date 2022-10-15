@@ -11,20 +11,20 @@ commandFiles.forEach(file => {
 	commands.push(command.data.toJSON());
 })
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '9' }).setToken(process.env.token);
 
 (async () => {
 	try {
 		console.log('Started refreshing application (/) commands.');
 
-		if (environment === "production") {
+		if (process.env.environment === "production") {
 			await rest.put(
-				Routes.applicationCommands(clientId),
+				Routes.applicationCommands(process.env.clientId),
 				{ body: commands },
 			);
 		} else {
 			await rest.put(
-				Routes.applicationGuildCommands(clientId, guildId), // => this function is only for commands that were created on the server
+				Routes.applicationGuildCommands(process.env.clientId, process.env.guildId), // => this function is only for commands that were created on the server
 				// Routes.applicationCommands(clientId), => this function is for global commands
 				{ body: commands },
 			);
