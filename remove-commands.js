@@ -18,7 +18,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.token);
 (async () => {
   console.log("Started refreshing application (/) command");
 
-  if (process.env.enviroment === "production") {
+  if (process.env.environment === "production") {
     rest
       .put(Routes.applicationCommands(process.env.clientId), {
         body: [],
