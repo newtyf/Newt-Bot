@@ -4,10 +4,10 @@
   "description": "learn discordjs",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "insert": "node src/deploy-commands.js"
+    "insert": "node deploy-commands.js",
+    "clear": "node remove-commands.js"
   },
   "author": "Axel Muñoz <axelskam.123@outlook.es>",
   "license": "MIT",
