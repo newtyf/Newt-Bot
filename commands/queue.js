@@ -9,7 +9,7 @@ module.exports = {
       const queue = client.player.getQueue(interaction.guild);
 
       const firstTrack = queue.previousTracks[queue.previousTracks.length - 1];
-      const tracks = [
+      let tracks = [
         {
           name: `Now.- ${firstTrack.title}`,
           value: `${firstTrack.author}`,

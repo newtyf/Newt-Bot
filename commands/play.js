@@ -44,33 +44,28 @@ module.exports = {
       requestedBy: interaction.user,
     });
 
-    ;
-    if (resultSearch.playlist === null) {
-      var track = resultSearch.tracks[0]
-    } else {
-      var playlist = resultSearch.playlist.tracks
-    }
-
-    //const playlist = await client.player.search();
-
-    if (!resultSearch)
+    if (!resultSearch) {
       return await interaction.followUp({
         content: `❌ | Musica **${song}** no encontrada!`,
       });
+    }
 
     if (resultSearch.playlist === null) {
-      queue.play(track)
+      var track = resultSearch.tracks[0];
+      queue.play(track);
       return await interaction.followUp({
         content: `⏱️ | Musica añadida a la lista **${track.title}**!`,
       });
     } else {
-      queue.play(playlist[0])
-      playlist.shift()
-      queue.addTracks(playlist)
+      var playlist = resultSearch.tracks;
+      queue.play(playlist[0]);
+      playlist.shift();
+      const reducePlaylist = playlist.slice(0,10)
+      queue.addTracks(reducePlaylist);
+      console.log(queue.tracks);
       return await interaction.followUp({
         content: `⏱️ | Musica añadida a la lista **${playlist[0].title}**!`,
       });
     }
-
   },
 };
