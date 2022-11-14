@@ -44,6 +44,7 @@ module.exports = {
       requestedBy: interaction.user,
     });
 
+    console.log(resultSearch);
     if (!resultSearch) {
       return await interaction.followUp({
         content: `❌ | Musica **${song}** no encontrada!`,
@@ -57,13 +58,13 @@ module.exports = {
         content: `⏱️ | Musica añadida a la lista **${track.title}**!`,
       });
     } else {
-      var playlist = resultSearch.tracks;
-      queue.play(playlist[0]);
+      let playlist = resultSearch.tracks;
+      let firstTrack = playlist[0];
+      queue.play(firstTrack);
       playlist.shift();
-      const reducePlaylist = playlist.slice(0,10)
-      queue.addTracks(reducePlaylist);
+      queue.addTracks(playlist);
       return await interaction.followUp({
-        content: `⏱️ | Musica añadida a la lista **${playlist[0].title}**!`,
+        content: `⏱️ | Musica añadida a la lista **${firstTrack.title}**!`,
       });
     }
   },
