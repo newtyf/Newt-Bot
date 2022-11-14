@@ -44,7 +44,6 @@ module.exports = {
       requestedBy: interaction.user,
     });
 
-    console.log(resultSearch);
     if (!resultSearch) {
       return await interaction.followUp({
         content: `❌ | Musica **${song}** no encontrada!`,
