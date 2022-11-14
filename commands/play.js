@@ -62,7 +62,6 @@ module.exports = {
       playlist.shift();
       const reducePlaylist = playlist.slice(0,10)
       queue.addTracks(reducePlaylist);
-      console.log(queue.tracks);
       return await interaction.followUp({
         content: `⏱️ | Musica añadida a la lista **${playlist[0].title}**!`,
       });
