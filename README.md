@@ -1,4 +1,4 @@
-<h1 align="center">Rock - Paper - Scissors</h1>
+<h1 align="center">Juan Bot</h1>
 <h6 align="center">Discord bot</h6>
 
 <div align="center"><img src="https://user-images.githubusercontent.com/87625663/232165199-88c5f0b2-a210-48ea-ab99-1d546728f4c1.png" alt="game-image" width="150" /></div>
