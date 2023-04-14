@@ -3,7 +3,7 @@
 
 <div align="center"><img src="https://user-images.githubusercontent.com/87625663/232165199-88c5f0b2-a210-48ea-ab99-1d546728f4c1.png" alt="game-image" width="150" /></div>
 
-<p align="center">Live Site <a href="https://rps.newtyf.com/">Here</a>.</p>
+[comment]: <> (<p align="center">Live Site <a href="https://rps.newtyf.com/">Here</a>.</p>)
 
 
 1. Bootstrapped with [Node JS](https://nodejs.org/en).
