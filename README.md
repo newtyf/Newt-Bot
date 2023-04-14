@@ -49,7 +49,7 @@
    npm run start
    ``` 
    
-## 👾 Util commands
+## 👾 Useful commands
 
   ```sh
    npm run insert
