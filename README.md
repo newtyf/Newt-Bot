@@ -8,7 +8,7 @@
 
 1. Bootstrapped with [Node JS](https://nodejs.org/en).
 
-## 👾 Set Up
+## 👾 Set up
 
 1. Node Version
 
