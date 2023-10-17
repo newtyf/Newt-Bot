@@ -24,7 +24,8 @@
     "isomorphic-fetch": "^3.0.0",
     "libsodium-wrappers": "^0.7.10",
     "node-fetch": "^2.6.6",
-    "undici": "^5.15.1"
+    "undici": "^5.15.1",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "eslint": "^8.12.0",
