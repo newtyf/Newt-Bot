@@ -23,7 +23,7 @@
     clientId= # required
     guildId= # required
     token= # required TOKEN BOT
-    api_key_giphy= # required for gifs
+    api_key_giphy= # required for giphs
     api_key_youtube= # optional
     environment=  # development || production
     NIXPACKS_NODE_VERSION= # optional
