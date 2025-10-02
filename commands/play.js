@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
+const { useMainPlayer } = require("discord-player");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,57 +15,64 @@ module.exports = {
     const guild = client.guilds.cache.get(interaction.guildId);
     const member = guild.members.cache.get(interaction.member.user.id);
     const voiceChannel = member.voice.channel;
+    const player = useMainPlayer();
     const song = interaction.options.getString("song");
 
     if (!voiceChannel) {
-      return await interaction.reply({
+      return interaction.reply({
         content: "Tu debes estar en un  canal de voz!",
         ephemeral: true,
       });
     }
 
-    const queue = client.player.createQueue(interaction.guild, {
-      metadata: {
-        channel: interaction.channel,
-      },
-    });
+    if (
+      interaction.guild.members.me.voice.channel &&
+      interaction.guild.members.me.voice.channel !== voiceChannel
+    ) {
+      return interaction.reply(
+        "I am already playing in a different voice channel!"
+      );
+    }
 
+    // Check if the bot has permission to join the voice channel
+    if (
+      !interaction.guild.members.me.permissions.has(
+        PermissionsBitField.Flags.Connect
+      )
+    ) {
+      return interaction.reply(
+        "I do not have permission to join your voice channel!"
+      );
+    }
+
+    // Check if the bot has permission to speak in the voice channel
+    if (
+      !interaction.guild.members.me
+        .permissionsIn(voiceChannel)
+        .has(PermissionsBitField.Flags.Speak)
+    ) {
+      return await interaction.reply(
+        "I do not have permission to speak in your voice channel!"
+      );
+    }
+
+    interaction.deferReply({ ephemeral: true });
     try {
-      if (!queue.connection) await queue.connect(voiceChannel);
-    } catch {
-      queue.destroy();
-      return await interaction.reply({
-        content: "¡No se pudo unir a tu canal de voz!",
-        ephemeral: true,
+      // Play the song in the voice channel
+      const result = await player.play(voiceChannel, song, {
+        nodeOptions: {
+          metadata: { channel: interaction.channel }, // Store text channel as metadata on the queue
+        },
       });
-    }
 
-    await interaction.deferReply();
-    const resultSearch = await client.player.search(song, {
-      requestedBy: interaction.user,
-    });
-
-    if (!resultSearch || resultSearch.tracks.length === 0 ) {
-      return await interaction.followUp({
-        content: `❌ | Musica **${song}** no encontrada!`,
-      });
-    }
-
-    if (resultSearch.playlist === null) {
-      var track = resultSearch.tracks[0];
-      queue.play(track);
-      return await interaction.followUp({
-        content: `⏱️ | Musica añadida a la lista **${track.title}**!`,
-      });
-    } else {
-      let playlist = resultSearch.tracks;
-      let firstTrack = playlist[0];
-      queue.play(firstTrack);
-      playlist.shift();
-      queue.addTracks(playlist);
-      return await interaction.followUp({
-        content: `⏱️ | Musica añadida a la lista **${firstTrack.title}**!`,
-      });
+      // Reply to the user that the song has been added to the queue
+      return interaction.editReply(
+        `${result.track.title} has been added to the queue!`
+      );
+    } catch (error) {
+      // Handle any errors that occur
+      console.error(error);
+      return interaction.editReply("An error occurred while playing the song!");
     }
   },
 };

@@ -1,7 +1,5 @@
 config.json
-
 /node_modules
-
 .eslintrc.json
-
 .env
+.DS_Store

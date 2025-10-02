@@ -1,37 +1,43 @@
-require("dotenv/config")
+require("dotenv/config");
 // Require the necessary discord.js classes
 const fs = require("node:fs");
 const { Collection, Client, GatewayIntentBits } = require("discord.js");
-const { Player } = require("discord-player");
+const { Player, GuildQueueEvent } = require("discord-player");
+const { DefaultExtractors } = require("@discord-player/extractor");
+
 
 // Create a new client instance
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
 });
 // Create a new player instance
-client.player = new Player(client, {
-  ytdlOptions: {
-    quality: "highestaudio",
-    highWaterMark: 1 << 25
-  }
-})
 
-client.player.on('connectionCreate', (queue) => {
-  queue.connection.voiceConnection.on('stateChange', (oldState, newState) => {
-    const oldNetworking = Reflect.get(oldState, 'networking');
-    const newNetworking = Reflect.get(newState, 'networking');
+const player = new Player(client);
+
+player.extractors.loadMulti(DefaultExtractors);
+
+player.on("connectionCreate", (queue) => {
+  queue.connection.voiceConnection.on("stateChange", (oldState, newState) => {
+    const oldNetworking = Reflect.get(oldState, "networking");
+    const newNetworking = Reflect.get(newState, "networking");
 
     const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
-      const newUdp = Reflect.get(newNetworkState, 'udp');
+      const newUdp = Reflect.get(newNetworkState, "udp");
       clearInterval(newUdp?.keepAliveInterval);
-    }
+    };
 
-    oldNetworking?.off('stateChange', networkStateChangeHandler);
-    newNetworking?.on('stateChange', networkStateChangeHandler);
+    oldNetworking?.off("stateChange", networkStateChangeHandler);
+    newNetworking?.on("stateChange", networkStateChangeHandler);
   });
 });
 
-client.player.on("trackStart", (queue, track) => queue.metadata.channel.send(`🎶 | Now playing **${track.title}**! \n ${track.url}`))
+// Handle the event when a track starts playing
+player.events.on(GuildQueueEvent.PlayerStart, async (queue, track) => {
+  // Get the metadata stored on the queue
+  const { channel } = queue.metadata;
+  // Send a message to the channel
+  await channel.send(`Now playing: ${track.title}`);
+});
 
 // Reading commands files
 client.commands = new Collection();
@@ -73,7 +79,6 @@ eventFiles.forEach((file) => {
     client.on(event.name, (...args) => event.execute(...args, client));
   }
 });
-
 
 // Login to Discord with your client's token
 

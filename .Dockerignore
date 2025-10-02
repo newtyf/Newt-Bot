@@ -4,6 +4,10 @@ README.md
 LICENSE
 .env
 .gitignore
+pnpm-lock.yaml
+/.vscode
+.DS_Store
+.git
 
 thunder-collection_R-P-S_postman.json
 thunder-collection_R-P-S.json
